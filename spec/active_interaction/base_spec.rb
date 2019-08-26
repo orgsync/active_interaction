@@ -29,6 +29,27 @@ InterruptInteraction = Class.new(TestInteraction) do
   end
 end
 
+
+class ChildInteraction < ActiveInteraction::Base
+  array :data do
+    object class: Fixnum
+  end
+
+  def execute
+    errors.add("data[1]", "is invalid")
+  end
+end
+
+class RootInteraction < ActiveInteraction::Base
+  array :data do
+    object class: Fixnum
+  end
+
+  def execute
+    compose(ChildInteraction, data: data)
+  end
+end
+
 describe ActiveInteraction::Base do
   include_context 'interactions'
 
@@ -339,6 +360,22 @@ describe ActiveInteraction::Base do
 
     it 'strips non-filtered inputs' do
       expect(interaction.inputs).to_not have_key(:other)
+    end
+  end
+
+  describe '#compose with nested errors' do
+    let(:described_class) { RootInteraction }
+    let(:inputs) { { data: [1,2,3] } }
+
+    context 'with invalid composition' do
+      it 'is invalid' do
+        expect(outcome).to be_invalid
+      end
+
+      it 'has the correct errors' do
+        expect(outcome.errors.details)
+          .to eql("data[1]": [{ error: "is invalid" }])
+      end
     end
   end
 
