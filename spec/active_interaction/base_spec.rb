@@ -374,7 +374,7 @@ describe ActiveInteraction::Base do
 
       it 'has the correct errors' do
         expect(outcome.errors.details)
-          .to eql("data[1]": [{ error: "is invalid" }])
+          .to eql(:"data[1]" => [{ error: "is invalid" }])
       end
     end
   end
