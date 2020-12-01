@@ -26,7 +26,9 @@ module ActiveInteraction
 
     register :hash
 
+    # rubocop:disable Metrics/MethodLength
     def cast(value, context)
+      value = ActionParamsCompatibility.cast_to_hash(value)
       case value
       when Hash
         value = value.with_indifferent_access

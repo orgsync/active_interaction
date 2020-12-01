@@ -76,6 +76,16 @@ describe ActiveInteraction::HashFilter, :filter do
       end
     end
 
+    context 'with an ActionController::Parameters' do
+      require 'action_controller'
+
+      let(:value) { ActionController::Parameters.new }
+
+      it 'converts to a hash' do
+        expect(result).to eql({})
+      end
+    end
+
     context 'with :strip false' do
       let(:options) { { strip: false } }
 
