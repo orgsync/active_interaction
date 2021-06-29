@@ -3,7 +3,7 @@ en:
     errors:
       messages:
         invalid: is invalid
-        invalid_nested: has an invalid nested value (%{name} => %{value})
+        invalid_nested: has an invalid nested value %{value}
         invalid_type: is not a valid %{type}
         missing: is required
     types:

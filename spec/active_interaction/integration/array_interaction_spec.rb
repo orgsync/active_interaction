@@ -68,6 +68,24 @@ describe ArrayInteraction do
     end
   end
 
+  context 'with a nested hash' do
+    let(:interaction) do
+      Class.new(ActiveInteraction::Base) do
+        array :foo do
+          hash do
+            integer :bar
+          end
+        end
+      end
+    end
+
+    let(:outcome) { interaction.run(foo: [{ bar: 'baz' }]) }
+
+    it 'sets error with nesting index' do
+      expect(outcome.errors).to include(:'foo[0].bar')
+    end
+  end
+
   context 'with an invalid default as a proc' do
     it 'does not raise an error' do
       expect do

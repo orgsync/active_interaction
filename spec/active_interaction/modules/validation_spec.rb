@@ -69,9 +69,12 @@ describe ActiveInteraction::Validation do
 
         it 'returns an :invalid_nested error' do
           expect(result).to eql [[
-            filter.name,
-            :invalid_nested,
-            { name: name.inspect, value: value.inspect }
+            "#{filter.name}.#{name}",
+            I18n.translate(
+              :invalid_nested,
+              scope: [ActiveInteraction::Base.i18n_scope, :errors, :messages],
+              value: value.inspect
+            )
           ]]
         end
       end

@@ -63,6 +63,9 @@ module ActiveInteraction
     # @return [Object]
     attr_reader :input_value
 
+    # @return [Integer]
+    attr_accessor :nesting_index
+
     # @param filter_name [Symbol]
     # @param input_value [Object]
     def initialize(filter_name, input_value)
