@@ -110,7 +110,7 @@ module ActiveInteraction
     end
 
     def detailed_error?(detail)
-      detail[:error].is_a?(Symbol)
+      !detail.nil? && detail[:error].is_a?(Symbol)
     end
 
     def merge_message!(attribute, message)

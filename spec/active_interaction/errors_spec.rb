@@ -58,6 +58,17 @@ describe ActiveInteraction::Errors do
         end
       end
 
+      context 'that is nil' do
+        it 'returns empty' do
+          no_details_error = OpenStruct.new(
+            messages: { attribute: ['is invalid'] },
+            details: { attribute: [nil] }
+          )
+          errors.merge!(no_details_error)
+          expect(errors.details[:attribute]).to eql [{ error: 'is invalid' }]
+        end
+      end
+
       context 'that is a symbol on base' do
         before do
           other.add(:base)
