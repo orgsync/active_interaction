@@ -23,7 +23,7 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
 Metrics/ClassLength:
-  Max: 120
+  Max: 130
 Metrics/MethodLength:
   Max: 15
 Style/FrozenStringLiteralComment:

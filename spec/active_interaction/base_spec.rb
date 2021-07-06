@@ -127,6 +127,60 @@ describe ActiveInteraction::Base do
     end
   end
 
+  describe '.strict_inputs' do
+    let(:described_class) do
+      Class.new(TestInteraction) do
+        strict_inputs true
+        float :thing1
+        float :thing2, default: 12.34
+      end
+    end
+
+    context '#run' do
+      it 'accepts declared inputs' do
+        inputs[:thing1] = 1.0
+        inputs[:thing2] = 2.0
+
+        expect(outcome).to be_valid
+      end
+
+      it 'accepts declared inputs' do
+        inputs[:thing1] = 1.0
+
+        expect(outcome).to be_valid
+      end
+
+      it 'does not accept inputs for undeclared filters' do
+        inputs[:thing1] = 1.0
+        inputs[:thing2] = 2.0
+        inputs[:thing3] = 3.0
+
+        expect { outcome }.to raise_error ActiveInteraction::InvalidInputsError
+      end
+
+      it 'does not accept inputs for undeclared filters' do
+        inputs[:thing3] = 3.0
+
+        expect { outcome }.to raise_error ActiveInteraction::InvalidInputsError
+      end
+    end
+
+    context '#new' do
+      it 'accepts declared inputs' do
+        inputs[:thing1] = 1.0
+        inputs[:thing2] = 2.0
+
+        expect(described_class.new(inputs)).to be_valid
+      end
+
+      it 'does not accept inputs for undeclared filters' do
+        inputs[:thing3] = 3.0
+
+        expect { described_class.new(inputs) }.to raise_error ActiveInteraction::InvalidInputsError
+      end
+    end
+  end
+
   describe '.method_missing(filter_type, *args, &block)' do
     it 'raises an error for an invalid filter type' do
       expect do

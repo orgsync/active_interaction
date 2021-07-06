@@ -79,6 +79,26 @@ module ActiveInteraction
         @_interaction_desc
       end
 
+      # Enables strict inputs.
+      #
+      # Requires that provided inputs to the interactor explicitly match declared filters.
+      #
+      # @example
+      #   strict_filters true
+      #
+      # @param strict [Boolean, nil] Enable strict inputs.
+      #
+      # @return [Boolean] Current strict input setting.
+      def strict_inputs(strict = nil)
+        if strict.nil?
+          @_interactor_strict_inputs = false unless instance_variable_defined?(:@_interactor_strict_inputs)
+        else
+          @_interactor_strict_inputs = strict
+        end
+
+        @_interactor_strict_inputs
+      end
+
       # Get all the filters defined on this interaction.
       #
       # @return [Hash{Symbol => Filter}]
@@ -288,7 +308,15 @@ module ActiveInteraction
         public_send("#{name}=", value)
       end
 
+      strict_inputs_check(inputs)
       @_interaction_inputs.freeze
+    end
+
+    def strict_inputs_check(inputs)
+      return unless self.class.strict_inputs
+      return unless (unexpected_keys = inputs.keys - @_interaction_inputs.keys).any?
+
+      raise InvalidInputsError, "unexpected inputs: #{unexpected_keys.join(', ')}."
     end
 
     def type_check

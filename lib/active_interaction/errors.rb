@@ -26,6 +26,11 @@ module ActiveInteraction
   # @return [Class]
   InvalidFilterError = Class.new(Error)
 
+  # Raised if a supplied inputs contain unexpected inputs.
+  #
+  # @return [Class]
+  InvalidInputsError = Class.new(Error)
+
   # Raised if an interaction is invalid.
   #
   # @return [Class]
