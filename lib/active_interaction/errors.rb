@@ -106,7 +106,7 @@ module ActiveInteraction
     private
 
     def attribute?(attribute)
-      @base.respond_to?(attribute)
+      @base.respond_to?(attribute.to_s.gsub(/\[(\d)+\]\z/, ''))
     end
 
     def detailed_error?(detail)
